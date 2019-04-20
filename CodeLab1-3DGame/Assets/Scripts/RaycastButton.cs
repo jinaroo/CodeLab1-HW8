@@ -7,6 +7,8 @@ public class RaycastButton : MonoBehaviour
     public GameObject[] Heads;
     private Camera mainCamera;
     
+    private int currentHeadIndex;
+    
     private void Start()
     {
         mainCamera = Camera.main;
@@ -39,6 +41,13 @@ public class RaycastButton : MonoBehaviour
                     
                     // replace gameobject to random from list
                     int i = Random.Range(0, Heads.Length);
+
+                    while (i == currentHeadIndex)
+                    {
+                        i = Random.Range(0, Heads.Length);
+                    }
+
+                    currentHeadIndex = i;
                     Instantiate(Heads[i], myRaycastHitInfo.transform.position, Quaternion.identity);
                 }
             }
