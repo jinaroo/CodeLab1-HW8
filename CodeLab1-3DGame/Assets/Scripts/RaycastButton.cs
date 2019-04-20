@@ -5,15 +5,18 @@ using UnityEngine;
 public class RaycastButton : MonoBehaviour
 {
     public GameObject[] Heads;
+    private Camera mainCamera;
     
-        
+    private void Start()
+    {
+        mainCamera = Camera.main;
+    }
+
     // Update is called once per frame
     void Update()
-    {
-        Vector3 position = new Vector3(transform.position.x, transform.position.y);
-        
+    {   
         // generate a "ray" variable
-        Ray myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray myRay = mainCamera.ScreenPointToRay(Input.mousePosition);
         
         //visualize the raycast in the debug scene view
         Debug.DrawRay(myRay.origin, myRay.direction * 100, Color.yellow);
@@ -29,14 +32,14 @@ public class RaycastButton : MonoBehaviour
                 // instead of destroying collider, change to a random gameobject prefab from a list?
                 // if tag = eye, then instantiate another eye prefab and so on for all other facial features
 
-                if (gameObject.CompareTag("Head"))
+                if (myRaycastHitInfo.collider.gameObject.CompareTag("Head"))
                 {
                     // destroy current gameobject
                     Destroy(myRaycastHitInfo.collider.gameObject);
                     
                     // replace gameobject to random from list
                     int i = Random.Range(0, Heads.Length);
-                    Instantiate(Heads[i], position, Quaternion.identity);
+                    Instantiate(Heads[i], myRaycastHitInfo.transform.position, Quaternion.identity);
                 }
             }
         }
